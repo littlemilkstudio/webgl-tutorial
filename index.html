@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>
+      Webgl Fundementals
+    </title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      canvas#c {
+        height: 100vh;
+        width: 100vw;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+
+      //an attribute will receive data from a buffer
+      attribute vec2 a_position;
+
+      uniform vec2 u_resolution;
+
+      //all shaders have a main function
+      void main() {
+        // convert the position from pixels to 0.0 to 1.0
+        vec2 zeroToOne = a_position / u_resolution;
+
+        // convert from 0->1 to 0->2
+        vec2 zeroToTwo = zeroToOne * 2.0;
+
+        // convert from 0->2 to -1->+1
+        vec2 clipspace = zeroToTwo - 1.0; 
+
+        // gl_Position is a special variab;e a vertex shader
+        // is responsible for setting
+        // flip clip space
+        gl_Position = vec4(clipspace * vec2(1, -1), 0, 1);
+      }
+
+    </script>
+    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+
+      // fragment shaders dont have a default precision
+      // so we need to pick one. mediump is a good default.
+      precision mediump float;
+
+      uniform vec4 u_color;
+
+      void main () {
+        // gl_FragColor is a special variable a fragment
+        // shader is responsible for setting
+        gl_FragColor = u_color; 
+      }
+
+    </script>
+    <script src="scripts/webglUtils.js"></script>
+    <script src="scripts/index.1.2.js"></script>
+  </body>
+</html>
